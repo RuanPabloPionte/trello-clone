@@ -30,7 +30,7 @@ export const getTodosGroupedByColumn = async () => {
     return acc;
   }, new Map<TypedColumn, Column>());
 
-  // vai basicamente, verificar se cada um dos valores do array não é uma key do Map columns, e se um deles não for, ent criar um o id: [valor do array], e um array vazio.
+  // vai basicamente, verificar se cada um dos valores do array não é uma key do Map columns, e se um deles não for, ent criar um id: [valor do array], e um array vazio.
   const columnTypes: TypedColumn[] = ["todo", "inprogress", "done"];
 
   for (const columnType of columnTypes) {
@@ -41,8 +41,10 @@ export const getTodosGroupedByColumn = async () => {
       });
     }
   }
-
+  // console.log(Array.from(columns.entries()));
+  // ordena ele para seguir a ordem do columnTypes "todo", "inprogress", "done"
   const sortedColumns = new Map(
+    // O método entries() retorna um iterador que produz pares chave/valor
     Array.from(columns.entries()).sort(
       (a, b) => columnTypes.indexOf(a[0]) - columnTypes.indexOf(b[0])
     )
