@@ -10,8 +10,9 @@ type Column = {
 };
 
 type Todo = {
+  // atributos com $ são orinundos do appwrite
   $id: string;
-  $created: string;
+  $createdAt: string;
   title: string;
   status: TypedColumn;
   image?: Image;
