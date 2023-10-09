@@ -67,7 +67,23 @@ function Board() {
       newColumns.set(startCol.id, newCol);
       setBoardState({ ...board, columns: newColumns });
     } else {
-      console.log("arrastando em colunas diferentes");
+      // arrastando em colunas diferentes
+      const finishTodos = Array.from(finishCol.todos);
+      finishTodos.splice(destination.index, 0, todoMoved);
+
+      const newColumns = new Map(board.columns);
+      const newCol = {
+        id: startCol.id,
+        todos: newTodos,
+      };
+
+      newColumns.set(startCol.id, newCol);
+      newColumns.set(finishCol.id, {
+        id: finishCol.id,
+        todos: finishTodos,
+      });
+
+      setBoardState({ ...board, columns: newColumns });
     }
   };
 
