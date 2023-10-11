@@ -1,15 +1,23 @@
 "use client";
-import { Fragment } from "react";
+import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useModalStore } from "@/store/ModalStore";
 import { useBoardStore } from "@/store/BoardStore";
 import TaskTypedRadioGroup from "./TaskTypedRadioGroup";
+import Image from "next/image";
+import { PhotoIcon } from "@heroicons/react/20/solid";
 
 function Modal() {
-  const [newTaskInput, setNewTaskInput] = useBoardStore((state) => [
-    state.newTaskInput,
-    state.setNewTaskInput,
-  ]);
+  const imagePickerRef = useRef<HTMLInputElement>(null);
+
+  const [newTaskInput, setNewTaskInput, image, setImage] = useBoardStore(
+    (state) => [
+      state.newTaskInput,
+      state.setNewTaskInput,
+      state.image,
+      state.setImage,
+    ]
+  );
   const [isOpen, closeModal] = useModalStore((state) => [
     state.isOpen,
     state.closeModal,
@@ -44,6 +52,41 @@ function Modal() {
                   />
                 </div>
                 <TaskTypedRadioGroup />
+
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      imagePickerRef.current?.click();
+                    }}
+                    className="w-full border border-gray-300 rounded outiline-none p-5 focus-visible:ring-2  focus-visible:ring-blue-500"
+                  >
+                    <PhotoIcon className="h-6 w-6 mr-2 inline-block" />
+                    Envie a imagem
+                  </button>
+
+                  {image && (
+                    <Image
+                      alt="Imagem enviada"
+                      width={200}
+                      height={200}
+                      className="w-full h-44 object-cover mt-2 filter hover: grayscale transition-all duration-150 cursor-not-allowed"
+                      src={URL.createObjectURL(image)}
+                      onClick={() => {
+                        setImage(null);
+                      }}
+                    />
+                  )}
+                  <input
+                    type="file"
+                    ref={imagePickerRef}
+                    hidden
+                    onChange={(e) => {
+                      if (!e.target.files![0].type.startsWith("image/")) return;
+                      setImage(e.target.files![0]);
+                    }}
+                  />
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

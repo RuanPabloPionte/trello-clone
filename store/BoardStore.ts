@@ -18,6 +18,9 @@ type BoardStore = {
 
   newTaskType: TypedColumn;
   setNewTaskType: (columnId: TypedColumn) => void;
+
+  image: File | null;
+  setImage: (image: File | null) => void;
 };
 
 export const useBoardStore = create<BoardStore>((set, get) => ({
@@ -69,4 +72,7 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
 
   newTaskType: "todo",
   setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
+
+  image: null,
+  setImage: (image: File | null) => set({ image }),
 }));
