@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useRef } from "react";
+import { FormEvent, Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useModalStore } from "@/store/ModalStore";
 import { useBoardStore } from "@/store/BoardStore";
@@ -10,23 +10,38 @@ import { PhotoIcon } from "@heroicons/react/20/solid";
 function Modal() {
   const imagePickerRef = useRef<HTMLInputElement>(null);
 
-  const [newTaskInput, setNewTaskInput, image, setImage] = useBoardStore(
-    (state) => [
+  const [newTaskInput, setNewTaskInput, image, setImage, addTask, newTaskType] =
+    useBoardStore((state) => [
       state.newTaskInput,
       state.setNewTaskInput,
       state.image,
       state.setImage,
-    ]
-  );
+      state.addTask,
+      state.newTaskType,
+    ]);
   const [isOpen, closeModal] = useModalStore((state) => [
     state.isOpen,
     state.closeModal,
   ]);
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!newTaskInput) return;
+
+    addTask(newTaskInput, newTaskType, image);
+    setImage(null);
+    closeModal();
+  };
+
   return (
     // Use the `Transition` component at the root level
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="form" className="relative z-10" onClose={closeModal}>
+      <Dialog
+        as="form"
+        className="relative z-10"
+        onClose={closeModal}
+        onSubmit={handleSubmit}
+      >
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full mx-auto w-full max-w-md items-center justify-center p-4 text-center">
             <Transition.Child
