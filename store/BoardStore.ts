@@ -12,6 +12,12 @@ type BoardStore = {
   setSearchString: (searchString: string) => void;
 
   deleteTask: (taskIndex: number, todo: Todo, id: TypedColumn) => void;
+
+  newTaskInput: string;
+  setNewTaskInput: (input: string) => void;
+
+  newTaskType: TypedColumn;
+  setNewTaskType: (columnId: TypedColumn) => void;
 };
 
 export const useBoardStore = create<BoardStore>((set, get) => ({
@@ -57,4 +63,10 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
       todo.$id
     );
   },
+
+  newTaskInput: "",
+  setNewTaskInput: (input: string) => set({ newTaskInput: input }),
+
+  newTaskType: "todo",
+  setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
 }));
